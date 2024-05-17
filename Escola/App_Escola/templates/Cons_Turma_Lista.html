@@ -1,0 +1,177 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/cons_turma_lista.css' %}">
+    <title>Lista de Turmas do professor</title>
+</head>
+<style>
+    /* cons_turma_lista.css */
+
+/* Reset de margens e paddings */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body{
+    background-color: #f4f4f4;
+}
+/* Estilo para o header */
+.login {
+    background-color: #333;
+    color: #fff;
+    padding: 10px 20px;
+}
+
+.fundo_menu {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nome_sistema {
+    font-size: 1.5em;
+}
+
+/* Estilo para o menu */
+.menu {
+    background-color: #555;
+    padding: 10px 20px;
+}
+
+.menu ul {
+    list-style-type: none;
+}
+
+.menu ul li {
+    display: inline;
+    margin-right: 10px;
+}
+
+.menu ul li a {
+    color: #fff;
+    text-decoration: none;
+}
+
+/* Estilo para a tabela de turmas */
+.principal {
+    margin: 100px auto;
+    max-width: 800px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.548);
+}
+
+.container {
+    margin: 0 auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table th, table td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: left;
+}
+
+table th {
+    background-color: #f2f2f2;
+}
+
+/* Estilo para os ícones */
+table td a {
+    color: #333;
+    text-decoration: none;
+}
+
+/* Estilo para os ícones de exclusão e visualização */
+.fa-trash, .fa-eye {
+    font-size: 20px;
+}
+
+.fa-trash:hover, .fa-eye:hover {
+    color: red;
+}
+
+.fa-eye {
+    color: blue;
+}
+button{
+    background-color: rgba(0, 0, 0, 0.74);
+    color: white;
+    padding: 10px 10px;
+    border-radius: 5px;
+}
+
+</style>
+<header class="login">
+    <div class="fundo_menu">
+        <div class="nome_sistema">
+            Sistema de Apoio aos Professores
+        </div>
+    </div>
+</header> 
+
+<nav class="menu">
+    <ul>
+       <li><a href="/cad_turma/{{id_logado}}">Cadastrar Turmas</a></li>
+       <li> | Professor logado: {{usuario_logado}} | </a></li>
+       <li><a href="./login.html">SAIR</a></li>
+    </ul>
+</nav> 
+     
+<body onLoad="login();">
+    <div class="principal">
+    <div class="container">
+        <section class="enquadramento">
+            <h1> Turmas Cadastradas</h1>
+        </section>
+         {% if messages %}
+            <ul class="mensagem_do_servidor" style="background: #7d7f81; padding: 24px; text-align:center; color: #fff;">
+                {% for mensagem in messages %}
+                   <li style="list-style: none;" {% if mensagem.tags %}class="alert alert-{{message.tags}}"{% endif %}>{{mensagem}}</li>
+                {% endfor %}
+            </ul>
+         {% endif %}
+        <input type="hidden"  name="id_logado" id="id_logado"  value="{{id_logado}}" />
+        <input type="hidden"  name="nome_logado" id="nome_logado"  value="{{usuario_logado}}" />
+        <hr>
+
+        <table>
+            <tr>
+                <th>Numero</th>
+                <th>Turma</th>
+                <th>Excluir</th>
+                <th>Visitar</th>
+            </tr>
+            
+            {% for igs in turmas_do_professor %}
+            <tr>
+                <td style="text-align:center">{{igs.id}} </td>
+                <td>{{igs.nome_turma}}</td>
+                <td style="text-align:center">
+                    <a href="{% url 'excluir_turma' igs.id %}"><i class="fa-solid fa-trash"></i></a>
+                </td>                
+                <td style="text-align:center">
+                    <a href="{% url 'ver_atividades' igs.id %}"><i class="fa-solid fa-eye"></i></a>
+                </td>
+            </tr>
+            {% endfor %}
+            <a href="{% url 'exportar_para_excel_turmas' %}" download>
+                <button style="margin-top: 20px; margin-bottom: 20px;">Exportar para Excel</button>
+            </a>
+        </table>
+
+    </div>    
+    </div>
+
+<script src="https://kit.fontawesome.com/c9237383f1.js" crossorigin="anonymous"></script>
+
+</body>
+</html>

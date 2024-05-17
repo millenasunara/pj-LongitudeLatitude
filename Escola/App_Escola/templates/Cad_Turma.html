@@ -1,0 +1,142 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/cad_turma.css' %}">
+    <title>Programação Web Back End</title>
+</head>
+<style>
+    /* cad_turma.css */
+
+/* Reset de margens e paddings */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Estilo para o header */
+.login {
+    background-color: #333;
+    color: #fff;
+    padding: 10px 20px;
+}
+
+.fundo_menu {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nome_sistema {
+    font-size: 1.5em;
+}
+
+/* Estilo para o menu */
+.menu {
+    background-color: #555;
+    padding: 10px 20px;
+}
+
+.menu ul {
+    list-style-type: none;
+}
+
+.menu ul li {
+    display: inline;
+    margin-right: 10px;
+}
+
+.menu ul li a {
+    color: #fff;
+    text-decoration: none;
+}
+
+/* Estilo para o formulário */
+.principal {
+    margin: 20px auto;
+    max-width: 600px;
+    padding: 20px;
+    border: 1px solid #ccc;
+}
+
+.form-content {
+    margin-bottom: 20px;
+}
+
+.form-content input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+}
+
+.botoes {
+    text-align: center;
+}
+
+.botao_confirmar {
+    display: inline-block;
+}
+
+.btn_conf_cancel {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+.btn_conf_cancel:hover {
+    background-color: #0056b3;
+}
+
+</style>
+<header class="login">
+    <div class="fundo_menu">
+
+        <div class="nome_sistema">
+            Sistema de Apoio aos Professores
+        </div>
+    </div>
+</header>
+<nav class="menu">
+    <ul>
+        <li id="nome_logado"> Professor logado:<a href=""> {{usuario_logado}}  | </a></li>
+        <li><a href="../accounts/logout">SAIR</a></li>
+    </ul>
+</nav>
+
+<body>
+    <div class="principal">
+    <div class="container">
+        <section class="enquadramento">
+            <h1> Cadastro de Turmas</h1>
+        </section>
+         {% if messages %}
+            <ul class="mensagem_do_servidor" style="background: #7d7f81; padding: 24px; text-align:center; color: #fff;">
+                {% for mensagem in messages %}
+                   <li style="list-style: none;" {% if mensagem.tags %}class="alert alert-{{message.tags}}"{% endif %}>{{mensagem}}</li>
+                {% endfor %}
+            </ul>
+         {% endif %}
+
+        <form id="form" class="form" method="POST" action="{% url 'salvar_turma_nova' %}">{% csrf_token %}
+
+                <div class="form-content">
+
+                    <input type="hidden"  name="id_professor" id="id_logado"  value="{{id_logado}}" />
+                    <input type="text" id="nome_turma" name="nome_turma" value="" placeholder="Digite o nome da turma" />
+                    <a>Nome deve ter no mínimo 3 caracteres</a>
+                </div>
+                <div class="botoes">
+                    <div class="botao_confirmar">
+                        <button type="submit" class="btn_conf_cancel btn_confirmar">Cadastrar</button>
+                    </div>
+                </div>
+        </form>
+
+    </div>
+    </div>
+</body>
+</html>
